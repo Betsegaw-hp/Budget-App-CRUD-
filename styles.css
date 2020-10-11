@@ -286,7 +286,7 @@ input:focus {
 .clear-btn:hover {
   color: var(--clr-red-dark);
 }
-@media screen and (min-width:700px) {
+@media screen and (min-width:850px) {
   .section-center {
     display: grid;
     grid-template-columns: auto auto;
