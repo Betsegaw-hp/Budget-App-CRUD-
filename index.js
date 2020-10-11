@@ -25,7 +25,6 @@ function ComputeBuget() {
     //delete then add (replace) 
     this.replaceLocalStorage(`Buget-input`, this.BugetValue);
   
-    // updater();
     showUpdate[0].innerHTML = this.BugetValue;
     
     if(this.ExpenseValue !== undefined)
