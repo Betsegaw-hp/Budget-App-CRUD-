@@ -1,4 +1,15 @@
 /*
+  IE 10+ media query specification 
+*/
+@media all and (-ms-high-contrast: none), (-ms-high-contrast: active) {
+  .section-center {
+    display: none;
+  }
+  body::after {
+    content: 'This App is incompatible with your browser.Please consider to use Modern latest browser';
+  }
+}
+/*
 =============== 
 Fonts
 ===============
@@ -177,10 +188,9 @@ input:focus {
   border-radius: 0;
 }
 .Area-updater {
- /* border: 1px solid;*/
-  margin: .5rem;
   padding:1rem;
   display: flex;
+  gap: 1rem;
   flex-direction: column;
   justify-content: space-around;
   align-items: center;
@@ -292,7 +302,7 @@ input:focus {
     grid-template-columns: auto auto;
   }
 }
-@media screen and (min-width:460px) {
+@media screen and (min-width:400px) {
   .Area-updater {
     display: flex;
     flex-direction: row;
