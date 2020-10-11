@@ -7,6 +7,10 @@ const container = document.querySelector(".grocery-container")
 const ClearBtn = document.querySelector('[data-clear-btn]')
 
 const PREFIX = 'Bugget-app-';
+// edit option options
+let editValue, editTitle;
+let editFlag = false;
+let editID = "";
 
 function ComputeBuget() {
   
@@ -27,7 +31,10 @@ function ComputeBuget() {
     if(this.ExpenseValue !== undefined)
     return showUpdate[2].innerHTML = this.BugetValue - this.ExpenseValue;
 
-    showUpdate[2].innerHTML = this.BugetValue
+    showUpdate[2].innerHTML = this.BugetValue;
+
+    // back to default
+    return this.BackToDefault();
   }
 
   this.addExpense = () => {
@@ -36,7 +43,19 @@ function ComputeBuget() {
 
     if(this.ExpenseValue === '' || this.ExpenseValue < 0 || this.ExpenseTitle === '') 
       return this.ExpenseValue = undefined; 
-    
+
+
+    if(editFlag) {
+      editValue.innerHTML = this.ExpenseValue;
+      editTitle.innerHTML = this.ExpenseTitle;
+      //edit Local Storage
+       
+      this.editLocalStorage(editID, this.ExpenseValue, this.ExpenseTitle);
+
+      // back to default
+      return this.BackToDefault();
+    }
+
     this.ExpenseValue = parseFloat(this.ExpenseValue);
       this.CreatList();
     
@@ -56,6 +75,9 @@ function ComputeBuget() {
    // add last expense value to infoList
    
    this.replaceLocalStorage(`net-Expense-Value`, this.ExpenseValue)
+
+   // back to default
+    this.BackToDefault();
   }
 
   this.CreatList = () => {
@@ -87,18 +109,28 @@ function ComputeBuget() {
    // add event listeners to both buttons;
   const deleteBtn = element.querySelector(".delete-btn");
   deleteBtn.addEventListener("click", this.deleteExpense);
-  // const editBtn = element.querySelector(".edit-btn");
-  // editBtn.addEventListener("click", this.editExpense());
+  const editBtn = element.querySelector(".edit-btn");
+  editBtn.addEventListener("click", this.editExpense);
 
   //append child
   ExpenseValueTable.appendChild(element);
   //show container with lists
   container.classList.add("show-container");
   }
-
-  // this.editExpense = () => {
-
-  // }
+  // edit Item
+  this.editExpense = (e) => {
+    const element = e.currentTarget.parentElement.parentElement;
+      //set edit item
+      editValue = element.querySelector('.Value');
+      editTitle = element.querySelector('.title');
+      // set form value
+      inputs[1].value = editTitle.innerHTML;
+      inputs[2].value = editValue.innerHTML;
+      editFlag = true;
+      editID = element.dataset.id;
+      //change ExpenseBtn name
+      ExpenseBtn.textContent = "Edit Expense"
+  }
 
   this.deleteExpense = (e) => {
     const element = e.currentTarget.parentElement.parentElement;
@@ -143,16 +175,17 @@ function ComputeBuget() {
 
     // handle infolist L.S
     let infoItems = this.getFromLocalStorage(`${PREFIX}infoList`);
-    infoItems.filter(item => {
+    infoItems.filter((item, index) => {
       if(item.Key === `net-Expense-Value`) {
-        item.Value = 0;
+        infoItems.splice(index,1);
       }
-      localStorage.setItem(`${PREFIX}PrevExpValue`, item.Value);
-        showUpdate[1].innerHTML =item.Value;
+        showUpdate[1].innerHTML ='0';
         showUpdate[2].innerHTML = this.BugetValue;
       return item.Value;
     })
     localStorage.setItem(`${PREFIX}infoList`,  JSON.stringify(infoItems));
+    // handle prevExpValue (L.S)
+    localStorage.removeItem(`${PREFIX}PrevExpValue`);
    }
 
 
@@ -209,7 +242,47 @@ function ComputeBuget() {
      });
      localStorage.setItem(type, JSON.stringify(items));
     }
+    // edit from local storage
+    this.editLocalStorage = (id, value, title) => {
+      let eItems = this.getFromLocalStorage(`${PREFIX}elist`);;
+      let infoItems = this.getFromLocalStorage(`${PREFIX}infoList`);
+      let preValue;
 
+      eItems = eItems.map(item => {
+        if (item.id === id) {
+          // copy the value before changing
+          preValue = item.Value
+          // change
+          item.Value = value;
+          item.Key = title;
+        };
+        return item;
+      });
+      localStorage.setItem(`${PREFIX}elist`, JSON.stringify(eItems));
+
+     
+      infoItems.filter(item => {
+        if(item.Key === `net-Expense-Value`) {
+          if(item.Value !== 0 ){
+            item.Value += (value - preValue);
+          }
+          localStorage.setItem(`${PREFIX}PrevExpValue`, item.Value);
+            showUpdate[1].innerHTML =item.Value;
+            showUpdate[2].innerHTML = this.BugetValue - item.Value;
+          return item.Value
+        }
+      }) 
+      localStorage.setItem(`${PREFIX}infoList`,  JSON.stringify(infoItems));
+      
+    }
+  // back to default
+    this.BackToDefault = ()=> {
+      inputs[1].value = "";
+      inputs[2].value = "";
+      editFlag = false;
+      editID = "";
+      ExpenseBtn.textContent = "Add Expense"
+    }
      //SET UP 
     this.setupItems = () => {
       let eItems = this.getFromLocalStorage(`${PREFIX}elist`);
@@ -232,7 +305,6 @@ function ComputeBuget() {
             showUpdate[1].innerHTML = item.Value;
             this.ExpenseValue = item.Value;
            }
-           console.log(this.BugetValue, this.ExpenseValue)
         })
         showUpdate[2].innerHTML = showUpdate[0].innerHTML - showUpdate[1].innerHTML;
       }
@@ -262,8 +334,8 @@ function ComputeBuget() {
      // add event listeners to both buttons;
   const deleteBtn = element.querySelector(".delete-btn");
   deleteBtn.addEventListener("click", this.deleteExpense);
-  // const editBtn = element.querySelector(".edit-btn");
-  // editBtn.addEventListener("click", this.editExpense);
+  const editBtn = element.querySelector(".edit-btn");
+  editBtn.addEventListener("click", this.editExpense);
 
   //append child
   ExpenseValueTable.appendChild(element);
