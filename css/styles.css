@@ -6,7 +6,7 @@
     display: none;
   }
   body::after {
-    content: 'This App is incompatible with your browser.Please consider to use Modern latest browser';
+    content: 'This App is incompatible with your browser.Please consider to use Modern and latest browser';
   }
 }
 /*
