@@ -4,6 +4,7 @@
 @media all and (-ms-high-contrast: none), (-ms-high-contrast: active) {
   .section-center {
     display: none;
+    visibility: hidden;
   }
   body::after {
     content: 'This App is incompatible with your browser.Please consider to use Modern and latest browser';
