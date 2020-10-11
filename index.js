@@ -49,6 +49,7 @@ function ComputeBuget() {
 
   showUpdate[1].innerHTML = this.ExpenseValue;
   localStorage.setItem(`${PREFIX}PrevExpValue` , this.ExpenseValue);
+
   if(this.BugetValue !== undefined)
    showUpdate[2].innerHTML = this.BugetValue - this.ExpenseValue;
 
@@ -109,17 +110,50 @@ function ComputeBuget() {
             container.classList.remove("show-container");
         }
         //handle LOCAL STORAGE infoItem
-        // localStorage.setItem(`${PREFIX}PrevExpValue`, showUpdate[1].innerHTML -= value);
+        
         let infoItems = this.getFromLocalStorage(`${PREFIX}infoList`);
         infoItems.filter(item => {
           if(item.Key === `net-Expense-Value`) {
-           return item.Value -= value;
+            if(item.Value !== 0 ){
+              item.Value -= value;
+            }
+            localStorage.setItem(`${PREFIX}PrevExpValue`, item.Value);
+              showUpdate[1].innerHTML =item.Value;
+              showUpdate[2].innerHTML = this.BugetValue - item.Value;
+            return item.Value
           }
-        })
-        localStorage.setItem(`${PREFIX}infoList`,  JSON.stringify(infoItems))
+        }) 
+        localStorage.setItem(`${PREFIX}infoList`,  JSON.stringify(infoItems));
+
         // remove from local storage
         this.removeFromLocalStorage(id, `${PREFIX}elist`)
   }
+  //clear all items
+
+   this.clearAllItem = () => {
+    const items = document.querySelectorAll(".grocery-item");
+    if(items.length >0 ){
+        items.forEach(item=>{
+          ExpenseValueTable.removeChild(item);
+        })
+    }
+    container.classList.remove("show-container");
+    // handle eList L.S
+    localStorage.removeItem(`${PREFIX}elist`);
+
+    // handle infolist L.S
+    let infoItems = this.getFromLocalStorage(`${PREFIX}infoList`);
+    infoItems.filter(item => {
+      if(item.Key === `net-Expense-Value`) {
+        item.Value = 0;
+      }
+      localStorage.setItem(`${PREFIX}PrevExpValue`, item.Value);
+        showUpdate[1].innerHTML =item.Value;
+        showUpdate[2].innerHTML = this.BugetValue;
+      return item.Value;
+    })
+    localStorage.setItem(`${PREFIX}infoList`,  JSON.stringify(infoItems));
+   }
 
 
   //  add to local storage
@@ -194,8 +228,11 @@ function ComputeBuget() {
             inputs[0].value = item.Value;
             this.BugetValue = item.Value;
           }
-           else 
+           else {
             showUpdate[1].innerHTML = item.Value;
+            this.ExpenseValue = item.Value;
+           }
+           console.log(this.BugetValue, this.ExpenseValue)
         })
         showUpdate[2].innerHTML = showUpdate[0].innerHTML - showUpdate[1].innerHTML;
       }
@@ -235,6 +272,7 @@ function ComputeBuget() {
 const BugetComputer = new ComputeBuget();
 
 window.addEventListener("DOMContentLoaded",BugetComputer.setupItems());
+
 BugetBtn.addEventListener("click",(e) =>{ 
   e.preventDefault();
   BugetComputer.addBuget()
@@ -243,4 +281,9 @@ BugetBtn.addEventListener("click",(e) =>{
 ExpenseBtn.addEventListener('click',(e) =>{ 
   e.preventDefault();
   BugetComputer.addExpense()
+})
+
+ClearBtn.addEventListener('click' , (e)=> {
+  e.preventDefault();
+  BugetComputer.clearAllItem()
 })
