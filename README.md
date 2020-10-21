@@ -2,7 +2,7 @@
 
 * Uses Local Storage (CRUD)
 
-* this code uses OOP paradism (class, this... )
+* this code uses OOP paradigm (class, this... )
 
 * super responsive
 
