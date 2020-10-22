@@ -276,6 +276,7 @@ function ComputeBuget() {
     }
   // back to default
     this.BackToDefault = ()=> {
+      inputs[0].value = "";
       inputs[1].value = "";
       inputs[2].value = "";
       editFlag = false;
