@@ -19,12 +19,12 @@ function ComputeBuget() {
  this.addBuget = ()=> {
   this.BugetValue = inputs[0].value;
     if(this.BugetValue === '' || this.BugetValue < 0) {
+      this.BugetValue = showUpdate[0].innerHTML;
       // alert
       if(this.BugetValue === '') {
         return this.displayAlert(404, "Please Enter the Budget! Can't be Empty.")
       }
-      this.displayAlert(404, "Please Enter the Budget! Can't be Negative.")
-      return this.BugetValue = undefined;
+    return  this.displayAlert(404, "Please Enter the Budget! Can't be Negative.");
     }
       
     this.BugetValue = parseFloat(this.BugetValue);
@@ -55,8 +55,7 @@ function ComputeBuget() {
       return this.displayAlert(404, "Please Enter Your Expense Title!");
       }
 
-      this.displayAlert(404, "Please Enter Your Expense Value!");
-      return this.ExpenseValue = undefined; 
+      return this.displayAlert(404, "Please Enter Your Expense Value!");
     }
       
     if(editFlag) {
