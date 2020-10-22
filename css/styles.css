@@ -170,12 +170,12 @@ handle alart box
  .alert-box {
    position: sticky;
    top: 0;
-   border: 0 solid grey;
+   border: 0 solid ;
    padding: 1rem;
    margin: 0;
    text-align: center;
    letter-spacing: 4px;
-   font-family: 'Patrick Hand SC', cursive;
+   font-family: 'Kavivanar','Patrick Hand SC', cursive;
    background-color: rgba(164, 221, 169, 0.514);
    color: black;
    transform: translateY(-100%);
