@@ -5,6 +5,7 @@ const showUpdate = document.querySelectorAll('[data-show]')
 const ExpenseValueTable = document.querySelector('[data-value-table]')
 const container = document.querySelector(".grocery-container")
 const ClearBtn = document.querySelector('[data-clear-btn]')
+const alertBox = document.querySelector('.alert-box');
 
 const PREFIX = 'Bugget-app-';
 // edit option options
@@ -17,9 +18,15 @@ function ComputeBuget() {
   
  this.addBuget = ()=> {
   this.BugetValue = inputs[0].value;
-    if(this.BugetValue === '' || this.BugetValue < 0) 
+    if(this.BugetValue === '' || this.BugetValue < 0) {
+      // alert
+      if(this.BugetValue === '') {
+        return this.displayAlert(404, "Please Enter the Budget! Can't be Empty.")
+      }
+      this.displayAlert(404, "Please Enter the Budget! Can't be Negative.")
       return this.BugetValue = undefined;
-
+    }
+      
     this.BugetValue = parseFloat(this.BugetValue);
     //  add to local storage
     //delete then add (replace) 
@@ -27,11 +34,13 @@ function ComputeBuget() {
   
     showUpdate[0].innerHTML = this.BugetValue;
     
-    if(this.ExpenseValue !== undefined)
-    return showUpdate[2].innerHTML = this.BugetValue - this.ExpenseValue;
-
-    showUpdate[2].innerHTML = this.BugetValue;
-
+    if(this.ExpenseValue === undefined){
+      this.ExpenseValue = 0;
+    }
+    console.log(this.ExpenseValue)
+    showUpdate[2].innerHTML = this.BugetValue - this.ExpenseValue;
+    // alert
+    this.displayAlert(200, "Buget Added!")
     // back to default
     return this.BackToDefault();
   }
@@ -40,17 +49,31 @@ function ComputeBuget() {
     this.ExpenseTitle = inputs[1].value;
     this.ExpenseValue = inputs[2].value;
 
-    if(this.ExpenseValue === '' || this.ExpenseValue < 0 || this.ExpenseTitle === '') 
+    if(this.ExpenseValue === '' || this.ExpenseValue < 0 || this.ExpenseTitle === '') {
+      //  alert
+      if(this.ExpenseTitle === '') { 
+      return this.displayAlert(404, "Please Enter Your Expense Title!");
+      }
+
+      this.displayAlert(404, "Please Enter Your Expense Value!");
       return this.ExpenseValue = undefined; 
-
-
+    }
+      
     if(editFlag) {
       editValue.innerHTML = this.ExpenseValue;
       editTitle.innerHTML = this.ExpenseTitle;
+
       //edit Local Storage
-       
       this.editLocalStorage(editID, this.ExpenseValue, this.ExpenseTitle);
 
+      // alert
+      this.displayAlert(200, "Edit Succesed!")
+
+      if(localStorage.getItem(`${PREFIX}PrevExpValue`))
+    {
+      const prevEXpValue = JSON.parse(localStorage.getItem(`${PREFIX}PrevExpValue`));
+      this.ExpenseValue = prevEXpValue;
+   }
       // back to default
       return this.BackToDefault();
     }
@@ -68,12 +91,16 @@ function ComputeBuget() {
   showUpdate[1].innerHTML = this.ExpenseValue;
   localStorage.setItem(`${PREFIX}PrevExpValue` , this.ExpenseValue);
 
-  if(this.BugetValue !== undefined)
-   showUpdate[2].innerHTML = this.BugetValue - this.ExpenseValue;
+  if(this.BugetValue === undefined) 
+    this.BugetValue = 0;
+  
+  showUpdate[2].innerHTML = this.BugetValue - this.ExpenseValue;
 
    // add last expense value to infoList
-   
    this.replaceLocalStorage(`net-Expense-Value`, this.ExpenseValue)
+
+  //  alert
+  this.displayAlert(200, "Expense Item Added!")
 
    // back to default
     this.BackToDefault();
@@ -158,6 +185,9 @@ function ComputeBuget() {
 
         // remove from local storage
         this.removeFromLocalStorage(id, `${PREFIX}elist`)
+        this.ExpenseValue = undefined;
+        // alert
+        this.displayAlert(404, "Delete Succesed!")
   }
   //clear all items
 
@@ -185,6 +215,10 @@ function ComputeBuget() {
     localStorage.setItem(`${PREFIX}infoList`,  JSON.stringify(infoItems));
     // handle prevExpValue (L.S)
     localStorage.removeItem(`${PREFIX}PrevExpValue`);
+
+    // alert
+    this.displayAlert(404, "All Item Cleared!")
+    this.ExpenseValue = undefined;
    }
 
 
@@ -283,6 +317,27 @@ function ComputeBuget() {
       editID = "";
       ExpenseBtn.textContent = "Add Expense"
     }
+  // display Alert
+  this.displayAlert = (status, message) => {
+    // NOTE: 200 == Ok(success)
+    //       404 == error
+    alertBox.classList.add('show-alert');
+    alertBox.innerHTML = `${message}`;
+    switch (status) {
+      case 404:
+        alertBox.classList.add('error-alert')
+        break;
+      case 200:
+        alertBox.classList.remove('error-alert')
+        break;
+      default:
+        alertBox.classList.add('error-alert')
+        break;
+    }
+    setTimeout(()=> {
+      alertBox.classList.remove('show-alert');
+    }, 3000);
+  }  
      //SET UP 
     this.setupItems = () => {
       let eItems = this.getFromLocalStorage(`${PREFIX}elist`);

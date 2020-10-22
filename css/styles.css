@@ -72,6 +72,7 @@ Variables
   padding: 0;
   box-sizing: border-box;
 }
+
 body {
   font-family: var(--ff-secondary);
   background: var(--clr-grey-11);
@@ -79,6 +80,7 @@ body {
   line-height: 1.5;
   font-size: 0.875rem;
   min-height: 100vh;
+  transition: var(--transition);
 }
 ul {
   list-style-type: none;
@@ -162,12 +164,38 @@ font-style: italic;
 .btn:hover {
   background-color: var(--clr-primary-4);
 }
+/* 
+handle alart box
+*/
+ .alert-box {
+   position: absolute;
+   top: 0;
+   display: block;
+   width: 100%;
+   border: 0 solid grey;
+   padding: 1rem;
+   margin: 0;
+   text-align: center;
+   letter-spacing: 4px;
+   font-family: 'Kavivanar', 'Patrick Hand SC', cursive;
+   background-color: rgba(164, 221, 169, 0.514);
+   color: black;
+   transform: translateY(-100%);
+   transition: var(--transition);
+ }
+ .error-alert {
+  background-color: rgba(241, 166, 164, 0.514);
+  color: rgb(22, 17, 17);
+ }
+ .show-alert {
+  transform: translateY(0);
+ }
 
 /* 
 SECTION
 */
 .section-center {
-  padding: 2rem;
+  padding: 3rem 2rem;
   display: flex;
   flex: 1 1 1;
   gap:3rem;
