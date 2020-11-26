@@ -170,12 +170,12 @@ handle alart box
  .alert-box {
    position: sticky;
    top: 0;
-   border: 0 solid grey;
+   border: 0 solid ;
    padding: 1rem;
    margin: 0;
    text-align: center;
    letter-spacing: 4px;
-   font-family: 'Kavivanar', 'Patrick Hand SC', cursive;
+   font-family: 'Kavivanar','Patrick Hand SC', cursive;
    background-color: rgba(164, 221, 169, 0.514);
    color: black;
    transform: translateY(-100%);
@@ -200,8 +200,9 @@ SECTION
   flex-direction: column;
 }
 .Buget-form {
-  /* border: 1px solid; */
   padding:1rem;
+  border-radius: .5rem;
+  box-shadow: 2px 4px 5px rgba(41, 39, 39, 0.555);
 }
 input {
   padding: .6rem;
@@ -222,6 +223,8 @@ input:focus {
   justify-content: space-around;
   align-items: center;
   text-align: center;
+  border-radius: .5rem;
+  box-shadow: 2px 4px 5px rgba(41, 39, 39, 0.555);
 }
 .fa-money-bill,
 .fa-wallet  {
@@ -235,6 +238,13 @@ input:focus {
   margin: .5rem;
   padding: 1rem;
   color: var(--clr-red-light);
+  border-radius: .5rem;
+  box-shadow: 2px 4px 5px rgba(41, 39, 39, 0.555);
+}
+.Buget-form:hover,
+.Area-updater:hover,
+.expence-form:hover {
+  box-shadow: 2px 4px 10px rgba(41, 39, 39, 0.555);
 }
 .Expense-btn {
   background: var(--clr-red-light);
@@ -268,9 +278,12 @@ input:focus {
   border-radius: var(--radius);
   text-transform: capitalize;
 }
+.grocery-item {
+  background: var(--clr-grey-10);
+}
 .grocery-item:hover {
   color: var(--clr-grey-5);
-  background: var(--clr-grey-10);
+  background: var(--clr-grey-9);
 }
 .grocery-item:hover .title {
   color: var(--clr-grey-5);
@@ -297,12 +310,14 @@ input:focus {
 }
 .edit-btn:hover {
   color: var(--clr-green-dark);
+  transform: scale(1.5);
 }
 .delete-btn {
   color: var(--clr-red-light);
 }
 .delete-btn:hover {
   color: var(--clr-red-dark);
+  transform: scale(1.5);
 }
 .clear-btn {
   text-transform: capitalize;

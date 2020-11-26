@@ -19,12 +19,12 @@ function ComputeBuget() {
  this.addBuget = ()=> {
   this.BugetValue = inputs[0].value;
     if(this.BugetValue === '' || this.BugetValue < 0) {
-      this.BugetValue = showUpdate[0].innerHTML;
+      this.BugetValue = showUpdate[0].value;
       // alert
-      if(this.BugetValue === '') {
-        return this.displayAlert(404, "Please Enter the Budget! Can't be Empty.")
+      if(this.BugetValue < 0) {
+        return this.displayAlert(404, "Please Enter the Budget! Can't be Negative.")
       }
-    return  this.displayAlert(404, "Please Enter the Budget! Can't be Negative.");
+    return this.displayAlert(404, "Please Enter the Budget! Only Numbers Accepted.");
     }
       
     this.BugetValue = parseFloat(this.BugetValue);
