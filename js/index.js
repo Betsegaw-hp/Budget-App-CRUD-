@@ -267,7 +267,7 @@ function ComputeBuget() {
     //remove from local storage
     this.removeFromLocalStorage = (id, type) => {
       let items = this.getFromLocalStorage(type);
-     items = items.filter(item=> {
+     items = items.filter(item => {
          if(item.id !== id) {
              return item;
          }
